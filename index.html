@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media Interaktif IPAS Kelas 3 SD - Pengelompokan Hewan</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Google Fonts - Fredoka & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              yellow: '#FBBF24',
+              orange: '#F97316',
+              blue: '#0284C7',
+              green: '#10B981',
+              purple: '#8B5CF6',
+              dark: '#0F172A',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0284c7 100%);
+      color: #f8fafc;
+      user-select: none;
+    }
+
+    .font-heading {
+      font-family: 'Fredoka', cursive;
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .glass-card-hover:hover {
+      background: rgba(30, 41, 59, 0.85);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn-active {
+      background-color: #f97316 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="w-screen h-screen flex flex-col justify-between p-2 sm:p-4 md:p-6 overflow-hidden">
+
+  <header class="w-full flex-none glass-card rounded-2xl border border-slate-700/60 px-4 py-2.5 mb-3 z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      
+      <!-- Logo & Judul Aplikasi -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-yellow-400 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-orange-500/30">
+          <i class="fa-solid fa-hippo"></i>
+        </div>
+        <div class="hidden sm:block">
+          <h1 class="font-heading font-bold text-base md:text-lg text-yellow-400 leading-tight">IPAS Kelas 3 SD</h1>
+          <p class="text-[11px] text-slate-300">Pengelompokan Hewan</p>
+        </div>
+      </div>
+
+      <!-- Navigasi Utama (Desktop) -->
+      <nav class="flex items-center gap-1.5 bg-slate-900/80 p-1 rounded-xl border border-slate-700/60">
+        <button id="nav-home" onclick="navigateTo('home')" class="nav-link px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition text-slate-300 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-house mr-1"></i> Beranda
+        </button>
+        <button id="nav-materi" onclick="navigateTo('materi')" class="nav-link px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition text-slate-300 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-layer-group mr-1"></i> Materi
+        </button>
+        <button id="nav-kuis" onclick="navigateTo('kuis')" class="nav-link px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition text-slate-300 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-gamepad mr-1"></i> Kuis
+        </button>
+        <button id="nav-petunjuk" onclick="navigateTo('petunjuk')" class="nav-link px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition text-slate-300 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-circle-info mr-1"></i> Petunjuk & TP
+        </button>
+      </nav>
+
+      <!-- Control Suara Narasi -->
+      <div class="flex items-center gap-2">
+        <button id="audio-toggle-btn" onclick="toggleMuteSound()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-yellow-400 border border-slate-700 transition" title="Mute/Unmute Narasi">
+          <i id="audio-icon" class="fa-solid fa-volume-high text-base"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-7xl mx-auto glass-card rounded-3xl border border-slate-700/70 p-4 md:p-6 flex flex-col min-h-0 relative overflow-hidden">
+
+    <!-- ================= SECTION 1: BERANDA ================= -->
+    <section id="section-home" class="page-section w-full h-full flex flex-col justify-between space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center flex-1 min-h-0">
+        
+        <div class="lg:col-span-7 space-y-4 text-center lg:text-left flex flex-col justify-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-semibold w-fit mx-auto lg:mx-0">
+            <i class="fa-solid fa-sparkles"></i> Media Ajar IPAS Kurikulum Merdeka
+          </div>
+          <h2 class="font-heading text-2xl sm:text-4xl lg:text-5xl font-bold leading-tight text-white">
+            Eksplorasi Dunia <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400">Pengelompokan Hewan</span>
+          </h2>
+          <p class="text-slate-300 text-xs md:text-base leading-relaxed max-w-2xl">
+            Mari pelajari klasifikasi hewan berdasarkan **Tempat Hidup (Habitat)** dan **Penutup Tubuh** secara visual realistis lengkap dengan fitur narasi audio interaktif!
+          </p>
+
+          <div class="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
+            <button onclick="speakText('Selamat datang di media pembelajaran IPAS Kelas 3 SD!'); navigateTo('materi')" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white font-heading font-semibold text-base shadow-lg shadow-orange-500/30 transition transform hover:scale-105 flex items-center gap-2">
+              <i class="fa-solid fa-circle-play"></i> Mulai Eksplorasi
+            </button>
+            <button onclick="navigateTo('kuis')" class="px-6 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-heading font-semibold text-base border border-slate-700 transition flex items-center gap-2">
+              <i class="fa-solid fa-puzzle-piece text-green-400"></i> Uji Kuis Interaktif
+            </button>
+          </div>
+        </div>
+
+        <!-- Banner Visual Realistis Hewan -->
+        <div class="lg:col-span-5 grid grid-cols-2 gap-3 h-full max-h-[360px]">
+          <div onclick="switchCategory('habitat')" class="bg-slate-900/80 p-4 rounded-2xl cursor-pointer border border-slate-700/80 hover:border-emerald-500 transition flex flex-col items-center justify-center text-center space-y-2 group">
+            <div class="w-20 h-20 rounded-2xl bg-emerald-500/10 p-2 border border-emerald-500/30 group-hover:scale-110 transition duration-300 flex items-center justify-center">
+              <!-- Realistic Cat SVG Illustration -->
+              <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+                <path d="M 40,110 Q 30,50 65,70 Q 100,20 135,70 Q 170,50 160,110 Q 175,170 100,180 Q 25,170 40,110 Z" fill="#F97316"/>
+                <polygon points="45,80 30,30 75,60" fill="#EA580C"/>
+                <polygon points="155,80 170,30 125,60" fill="#EA580C"/>
+                <polygon points="50,75 38,40 70,62" fill="#FCA5A5"/>
+                <polygon points="150,75 162,40 130,62" fill="#FCA5A5"/>
+                <ellipse cx="75" cy="100" rx="12" ry="16" fill="#FFFFFF"/>
+                <ellipse cx="125" cy="100" rx="12" ry="16" fill="#FFFFFF"/>
+                <ellipse cx="75" cy="100" rx="6" ry="12" fill="#0284C7"/>
+                <ellipse cx="125" cy="100" rx="6" ry="12" fill="#0284C7"/>
+                <polygon points="100,115 92,125 108,125" fill="#EF4444"/>
+                <path d="M 100,125 Q 90,140 80,132 M 100,125 Q 110,140 120,132" stroke="#475569" stroke-width="3" fill="none"/>
+                <path d="M 60,120 L 20,115 M 60,125 L 15,125 M 60,130 L 25,135 M 140,120 L 180,115 M 140,125 L 185,125 M 140,130 L 175,135" stroke="#E2E8F0" stroke-width="2.5"/>
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-sm text-emerald-300">1. Tempat Hidup</h3>
+            <p class="text-[11px] text-slate-400">Darat, Air & Amphibi</p>
+          </div>
+
+          <div onclick="switchCategory('penutup')" class="bg-slate-900/80 p-4 rounded-2xl cursor-pointer border border-slate-700/80 hover:border-amber-500 transition flex flex-col items-center justify-center text-center space-y-2 group">
+            <div class="w-20 h-20 rounded-2xl bg-amber-500/10 p-2 border border-amber-500/30 group-hover:scale-110 transition duration-300 flex items-center justify-center">
+              <!-- Realistic Turtle SVG Illustration -->
+              <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+                <ellipse cx="100" cy="100" rx="65" ry="50" fill="#15803D" stroke="#166534" stroke-width="4"/>
+                <path d="M 60,70 L 100,60 L 140,70 L 150,100 L 140,130 L 100,140 L 60,130 L 50,100 Z" fill="#854D0E" stroke="#FEF08A" stroke-width="3"/>
+                <path d="M 100,60 L 100,140 M 60,70 L 140,130 M 140,70 L 60,130" stroke="#FEF08A" stroke-width="2"/>
+                <ellipse cx="160" cy="100" rx="20" ry="14" fill="#22C55E"/>
+                <circle cx="168" cy="95" r="3" fill="#0284C7"/>
+                <ellipse cx="50" cy="65" rx="16" ry="10" fill="#22C55E" transform="rotate(-20 50 65)"/>
+                <ellipse cx="50" cy="135" rx="16" ry="10" fill="#22C55E" transform="rotate(20 50 135)"/>
+                <ellipse cx="130" cy="60" rx="18" ry="10" fill="#22C55E" transform="rotate(30 130 60)"/>
+                <ellipse cx="130" cy="140" rx="18" ry="10" fill="#22C55E" transform="rotate(-30 130 140)"/>
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-sm text-amber-300">2. Penutup Tubuh</h3>
+            <p class="text-[11px] text-slate-400">Rambut, Bulu, Sisik, dll</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= SECTION 2: MATERI INTERAKTIF ================= -->
+    <section id="section-materi" class="page-section hidden w-full h-full flex flex-col space-y-3 min-h-0">
+      
+      <!-- Navigasi Kategori & Sub Tab (Satu Baris Ringkas) -->
+      <div class="flex-none flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 p-2 rounded-2xl border border-slate-700/80">
+        <!-- Main Category Toggle -->
+        <div class="flex items-center gap-1.5">
+          <button id="tab-cat-habitat" onclick="switchCategory('habitat')" class="px-3 py-1.5 rounded-xl font-heading font-semibold text-xs transition flex items-center gap-1.5 bg-orange-500 text-white">
+            <i class="fa-solid fa-earth-asia"></i> 1. Tempat Hidup
+          </button>
+          <button id="tab-cat-penutup" onclick="switchCategory('penutup')" class="px-3 py-1.5 rounded-xl font-heading font-semibold text-xs transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
+            <i class="fa-solid fa-shield-halved"></i> 2. Penutup Tubuh
+          </button>
+        </div>
+
+        <!-- Dynamic Sub Categories -->
+        <div id="sub-tabs-container" class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar">
+          <!-- JS Dynamic Sub Tabs -->
+        </div>
+      </div>
+
+      <!-- Detail Card Display Materi FULL CONTENT -->
+      <div class="flex-1 min-h-0 bg-slate-900/60 rounded-2xl p-4 border border-slate-700/80 flex flex-col justify-between overflow-hidden">
+        
+        <!-- Header Info Detail Sub-Kategori -->
+        <div class="flex-none flex items-center justify-between border-b border-slate-700/80 pb-2 mb-2">
+          <div class="flex items-center gap-3">
+            <div id="materi-display-icon" class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-tree"></i>
+            </div>
+            <div>
+              <h2 id="materi-display-title" class="font-heading font-bold text-lg md:text-xl text-yellow-400">Judul Kategori</h2>
+              <p id="materi-display-subtitle" class="text-xs text-slate-300 line-clamp-1">Deskripsi singkat kategori pengelompokan.</p>
+            </div>
+          </div>
+
+          <button onclick="readCurrentMateri()" class="px-3 py-1.5 rounded-xl bg-orange-500/20 hover:bg-orange-500/30 text-orange-300 border border-orange-500/30 text-xs font-semibold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-volume-high"></i> <span>Dengarkan</span>
+          </button>
+        </div>
+
+        <!-- Layout Isi Materi: Ciri-Ciri vs Gambar Realistis -->
+        <div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          
+          <!-- Box Penjelasan Ciri & Adaptasi -->
+          <div class="lg:col-span-5 bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl flex flex-col justify-between space-y-2 overflow-y-auto custom-scrollbar">
+            <div>
+              <h3 class="font-heading text-sm font-bold text-yellow-300 flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-green-400"></i> Ciri-ciri & Adaptasi Khas:
+              </h3>
+              <p id="materi-display-features" class="text-xs md:text-sm text-slate-200 leading-relaxed mt-1.5">
+                Penjelasan rinci ciri-ciri fisik hewan...
+              </p>
+            </div>
+
+            <div class="bg-slate-800/90 p-2.5 rounded-xl border border-slate-700/60">
+              <span class="text-[11px] font-semibold text-orange-400 block">💡 Fungsi Spesifik:</span>
+              <p id="materi-display-note" class="text-[11px] text-slate-300 mt-0.5">Penjelasan fungsi perlindungan diri/adaptasi.</p>
+            </div>
+          </div>
+
+          <!-- Box Daftar Contoh Gambar Realistis Hewan -->
+          <div class="lg:col-span-7 bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl flex flex-col justify-between min-h-0">
+            <h3 class="font-heading text-sm font-bold text-sky-300 flex items-center gap-2 flex-none mb-2">
+              <i class="fa-solid fa-paw"></i> Contoh Spesies & Visual Realistis:
+            </h3>
+
+            <div id="materi-examples-grid" class="flex-1 min-h-0 grid grid-cols-2 gap-2.5 overflow-y-auto custom-scrollbar pr-1">
+              <!-- JS Dynamic SVG Realistic Cards -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= SECTION 3: KUIS EVALUASI ================= -->
+    <section id="section-kuis" class="page-section hidden w-full h-full flex flex-col justify-center items-center">
+      
+      <!-- Start Screen Kuis -->
+      <div id="quiz-start-screen" class="w-full max-w-xl text-center space-y-4 my-auto">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-green-500/20 text-green-400 flex items-center justify-center text-3xl shadow-lg border border-green-500/30">
+          <i class="fa-solid fa-gamepad"></i>
+        </div>
+        <div class="space-y-1">
+          <h2 class="font-heading font-bold text-2xl text-white">Kuis Evaluasi Interaktif</h2>
+          <p class="text-slate-300 text-xs md:text-sm max-w-md mx-auto">Uji pemahamanmu tentang pengelompokan tempat hidup & penutup tubuh hewan melalui 5 pertanyaan seru!</p>
+        </div>
+        <button onclick="startQuiz()" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-heading font-bold text-base shadow-xl shadow-green-500/20 transition transform hover:scale-105">
+          <i class="fa-solid fa-play mr-2"></i> Mulai Kuis
+        </button>
+      </div>
+
+      <!-- Active Screen Kuis -->
+      <div id="quiz-active-screen" class="hidden w-full max-w-2xl flex flex-col space-y-4 my-auto">
+        
+        <div class="flex items-center justify-between text-xs font-semibold text-slate-400">
+          <span id="quiz-progress-text">Soal 1 dari 5</span>
+          <span id="quiz-score-live" class="text-yellow-400">Skor: 0</span>
+        </div>
+        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-yellow-400 to-orange-500 w-1/5 transition-all duration-300"></div>
+        </div>
+
+        <div class="space-y-2 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+          <h3 id="quiz-question-text" class="font-heading text-base md:text-lg font-bold text-white leading-snug">
+            Pertanyaan kuis akan muncul di sini...
+          </h3>
+          <button onclick="readQuizQuestion()" class="text-xs text-orange-400 hover:text-orange-300 flex items-center gap-1 font-medium">
+            <i class="fa-solid fa-volume-high"></i> Dengarkan Soal
+          </button>
+        </div>
+
+        <!-- Dynamic Options -->
+        <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Options JS -->
+        </div>
+
+        <div id="quiz-feedback" class="hidden p-3 rounded-xl text-xs font-semibold text-center border">
+        </div>
+
+        <div class="flex justify-end pt-1">
+          <button id="btn-next-question" onclick="nextQuestion()" class="hidden px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-heading font-semibold text-xs transition flex items-center gap-2">
+            Lanjut Soal <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Screen Kuis -->
+      <div id="quiz-result-screen" class="hidden w-full max-w-md text-center space-y-4 my-auto">
+        <div class="w-20 h-20 mx-auto rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-4xl shadow-xl border border-yellow-500/30">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div class="space-y-1">
+          <h2 class="font-heading font-bold text-2xl text-white">Hasil Kuis Kamu!</h2>
+          <p id="final-score-text" class="text-3xl font-heading font-extrabold text-yellow-400">100 / 100</p>
+          <p id="final-message" class="text-xs text-slate-300 max-w-sm mx-auto">Luar biasa! Kamu sangat memahami pengelompokan hewan.</p>
+        </div>
+        <div class="flex justify-center gap-3 pt-2">
+          <button onclick="startQuiz()" class="px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-heading font-semibold text-xs transition">
+            <i class="fa-solid fa-rotate-right mr-1"></i> Ulangi Kuis
+          </button>
+          <button onclick="navigateTo('materi')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-heading font-semibold text-xs border border-slate-700 transition">
+            <i class="fa-solid fa-book-open mr-1"></i> Pelajari Lagi
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= SECTION 4: PETUNJUK & TP ================= -->
+    <section id="section-petunjuk" class="page-section hidden w-full h-full flex flex-col justify-between space-y-3">
+      <div class="flex items-center gap-2 border-b border-slate-700/80 pb-2 flex-none">
+        <i class="fa-solid fa-circle-info text-xl text-sky-400"></i>
+        <h2 class="font-heading font-bold text-lg text-white">Petunjuk & Tujuan Pembelajaran (TP)</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+        <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <h3 class="font-heading font-semibold text-sm text-yellow-400 flex items-center gap-2">
+            <i class="fa-solid fa-compass"></i> Petunjuk Penggunaan:
+          </h3>
+          <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside leading-relaxed">
+            <li>Pilih menu **Materi** pada navigasi atas untuk menjelajah kelompok hewan.</li>
+            <li>Gunakan tombol **Tempat Hidup** atau **Penutup Tubuh** untuk mengganti modul.</li>
+            <li>Klik tiap sub-kategori untuk mengamati **Gambar Vektor Realistis** hewan.</li>
+            <li>Tekan tombol **Dengarkan** untuk memutar narasi suara otomatis.</li>
+            <li>Uji pemahamanmu pada menu **Kuis**.</li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <h3 class="font-heading font-semibold text-sm text-emerald-400 flex items-center gap-2">
+            <i class="fa-solid fa-bullseye"></i> Indikator Tujuan Pembelajaran (TP):
+          </h3>
+          <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside leading-relaxed">
+            <li>Peserta didik mampu mengklasifikasikan hewan berdasarkan habitatnya (Darat, Air, Amphibi).</li>
+            <li>Peserta didik mampu mengidentifikasi jenis penutup tubuh hewan (Rambut, Bulu, Sisik, Cangkang, Kulit Lembap).</li>
+            <li>Peserta didik mampu menganalisis hubungan adaptasi organ dan penutup tubuh dengan kelangsungan hidup hewan.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="w-full flex-none text-center py-1.5 text-[11px] text-slate-400 flex flex-col sm:flex-row justify-between items-center px-2">
+    <p>© 2026 IPAS Kelas 3 SD - Kurikulum Merdeka</p>
+    <p>Pengembang Media: <span class="text-yellow-400 font-semibold">Mashindra Prisma Saputra</span></p>
+  </footer>
+
+  <script>
+    /* REALISTIC SVG ILLUSTRATIONS STORE */
+    const realisticSVGs = {
+      kucing: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><path d="M 40,110 Q 30,50 65,70 Q 100,20 135,70 Q 170,50 160,110 Q 175,170 100,180 Q 25,170 40,110 Z" fill="#F97316"/><polygon points="45,80 30,30 75,60" fill="#EA580C"/><polygon points="155,80 170,30 125,60" fill="#EA580C"/><ellipse cx="75" cy="100" rx="10" ry="14" fill="#FFF"/><ellipse cx="125" cy="100" rx="10" ry="14" fill="#FFF"/><ellipse cx="75" cy="100" rx="5" ry="10" fill="#0284C7"/><ellipse cx="125" cy="100" rx="5" ry="10" fill="#0284C7"/><polygon points="100,115 94,122 106,122" fill="#EF4444"/><path d="M 60,120 L 20,115 M 60,125 L 15,125 M 140,120 L 180,115 M 140,125 L 185,125" stroke="#E2E8F0" stroke-width="2"/></svg>`,
+      sapi: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><ellipse cx="100" cy="110" rx="65" ry="50" fill="#F8FAFC"/><path d="M 50,90 Q 60,70 80,85 Q 65,120 50,90 Z" fill="#0F172A"/><path d="M 120,80 Q 140,70 150,95 Q 135,130 120,80 Z" fill="#0F172A"/><ellipse cx="100" cy="130" rx="35" ry="22" fill="#FCA5A5"/><circle cx="85" cy="130" r="5" fill="#991B1B"/><circle cx="115" cy="130" r="5" fill="#991B1B"/><circle cx="70" cy="95" r="8" fill="#0F172A"/><circle cx="130" cy="95" r="8" fill="#0F172A"/><path d="M 45,65 Q 20,40 40,30 Q 55,45 50,60 Z" fill="#FEF08A"/><path d="M 155,65 Q 180,40 160,30 Q 145,45 150,60 Z" fill="#FEF08A"/></svg>`,
+      ikan: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><path d="M 30,100 Q 90,30 150,100 Q 90,170 30,100 Z" fill="#0284C7"/><polygon points="30,100 5,60 5,140" fill="#0369A1"/><path d="M 90,35 Q 110,10 130,38" stroke="#0369A1" stroke-width="8" fill="none"/><path d="M 90,165 Q 110,190 130,162" stroke="#0369A1" stroke-width="8" fill="none"/><circle cx="125" cy="85" r="8" fill="#FFF"/><circle cx="127" cy="85" r="4" fill="#0F172A"/><path d="M 70,80 Q 80,100 70,120 M 90,75 Q 100,100 90,125 M 110,80 Q 120,100 110,120" stroke="#BAE6FD" stroke-width="3" fill="none"/></svg>`,
+      hiu: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><path d="M 20,110 Q 80,40 180,95 Q 100,160 20,110 Z" fill="#64748B"/><polygon points="100,60 120,10 145,50" fill="#475569"/><polygon points="20,110 0,70 5,145" fill="#334155"/><circle cx="150" cy="88" r="5" fill="#0F172A"/><path d="M 125,100 L 125,112 M 132,100 L 132,112 M 139,100 L 139,112" stroke="#334155" stroke-width="2.5"/><path d="M 140,118 Q 160,125 175,108" stroke="#0F172A" stroke-width="3" fill="none"/></svg>`,
+      katak: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><ellipse cx="100" cy="120" rx="55" ry="40" fill="#22C55E"/><circle cx="70" cy="70" r="18" fill="#22C55E"/><circle cx="130" cy="70" r="18" fill="#22C55E"/><circle cx="70" cy="70" r="10" fill="#FFF"/><circle cx="130" cy="70" r="10" fill="#FFF"/><circle cx="70" cy="70" r="5" fill="#0F172A"/><circle cx="130" cy="70" r="5" fill="#0F172A"/><path d="M 65,115 Q 100,135 135,115" stroke="#15803D" stroke-width="4" fill="none"/><ellipse cx="45" cy="145" rx="22" ry="12" fill="#166534" transform="rotate(-30 45 145)"/><ellipse cx="155" cy="145" rx="22" ry="12" fill="#166534" transform="rotate(30 155 145)"/></svg>`,
+      burung: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><path d="M 50,120 Q 70,50 130,80 Q 170,110 130,150 Q 80,160 50,120 Z" fill="#3B82F6"/><polygon points="130,80 185,90 140,105" fill="#F59E0B"/><circle cx="115" cy="75" r="7" fill="#FFF"/><circle cx="117" cy="75" r="3.5" fill="#0F172A"/><path d="M 60,120 Q 100,110 110,145 Q 70,150 60,120 Z" fill="#1D4ED8"/><path d="M 50,130 L 15,160 M 50,135 L 20,175" stroke="#1E40AF" stroke-width="6"/></svg>`,
+      kurakura: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><ellipse cx="100" cy="100" rx="60" ry="45" fill="#15803D"/><path d="M 60,70 L 100,60 L 140,70 L 150,100 L 140,130 L 100,140 L 60,130 L 50,100 Z" fill="#854D0E" stroke="#FEF08A" stroke-width="3"/><ellipse cx="160" cy="100" rx="18" ry="12" fill="#22C55E"/><circle cx="166" cy="96" r="3" fill="#0284C7"/><ellipse cx="50" cy="65" rx="14" ry="9" fill="#22C55E"/><ellipse cx="50" cy="135" rx="14" ry="9" fill="#22C55E"/><ellipse cx="130" cy="60" rx="16" ry="9" fill="#22C55E"/><ellipse cx="130" cy="140" rx="16" ry="9" fill="#22C55E"/></svg>`,
+      ular: `<svg viewBox="0 0 200 200" class="w-full h-full drop-shadow"><path d="M 30,150 Q 70,80 100,130 T 170,80" fill="none" stroke="#65A30D" stroke-width="24" stroke-linecap="round"/><path d="M 30,150 Q 70,80 100,130 T 170,80" fill="none" stroke="#84CC16" stroke-width="14" stroke-linecap="round"/><circle cx="170" cy="75" r="4" fill="#0F172A"/><path d="M 180,80 L 195,75 M 180,80 L 195,85" stroke="#EF4444" stroke-width="2.5"/></svg>`
+    };
+
+    /* MATERI DATA IPAS KELAS 3 SD */
+    const materiData = {
+      habitat: {
+        title: "Tempat Hidup (Habitat)",
+        subItems: {
+          darat: {
+            title: "Hewan Darat",
+            subtitle: "Hewan yang hidup dan beraktivitas di daratan (tanah/pohon).",
+            icon: "fa-mountain-sun",
+            features: "Bernapas menggunakan paru-paru dan bergerak menggunakan kaki, sayap, atau perut.",
+            note: "Memiliki organ tubuh yang kokoh untuk menopang berat badan di tanah.",
+            examples: [
+              { name: "Kucing (Mamalia)", svg: realisticSVGs.kucing, desc: "Bernapas paru-paru, bergerak 4 kaki." },
+              { name: "Sapi (Herbivora)", svg: realisticSVGs.sapi, desc: "Sistem pencernaan memamah biak." }
+            ]
+          },
+          air: {
+            title: "Hewan Air",
+            subtitle: "Hewan yang hidup sepenuhnya di dalam air (tawar & laut).",
+            icon: "fa-water",
+            features: "Umumnya bernapas dengan insang dan bergerak mendayung memakai sirip & ekor.",
+            note: "Tubuhnya dirancang streamlines licin untuk memudahkan berenang.",
+            examples: [
+              { name: "Ikan Mas (Air Tawar)", svg: realisticSVGs.ikan, desc: "Bernapas insang, bersisik licin." },
+              { name: "Hiu (Pemangsa Laut)", svg: realisticSVGs.hiu, desc: "Sirip tajam penyeimbang berenang." }
+            ]
+          },
+          amphibi: {
+            title: "Hewan Amphibi (Dua Alam)",
+            subtitle: "Hewan yang dapat beradaptasi hidup di darat maupun air.",
+            icon: "fa-frog",
+            features: "Bernapas insang saat berudu, lalu paru-paru & kulit basah saat dewasa.",
+            note: "Membutuhkan lingkungan lembap agar kulitnya tidak mengering.",
+            examples: [
+              { name: "Katak Hijau", svg: realisticSVGs.katak, desc: "Melompat di darat, bertelur di air." }
+            ]
+          }
+        }
+      },
+      penutup: {
+        title: "Penutup Tubuh Hewan",
+        subItems: {
+          rambut: {
+            title: "Rambut (Mamalia)",
+            subtitle: "Tubuh ditutupi helai-helai rambut halus atau tebal.",
+            icon: "fa-dog",
+            features: "Menjaga suhu tubuh tetap hangat dan melindungi kulit dari luka fisik.",
+            note: "Merupakan ciri utama kelompok hewan mamalia (menyusui).",
+            examples: [
+              { name: "Kucing", svg: realisticSVGs.kucing, desc: "Ditutupi rambut halus hangat." },
+              { name: "Sapi", svg: realisticSVGs.sapi, desc: "Rambut pendek pelindung kulit." }
+            ]
+          },
+          bulu: {
+            title: "Bulu (Unggas & Burung)",
+            subtitle: "Tubuh ditutupi oleh bulu yang memiliki struktur pelepah.",
+            icon: "fa-feather",
+            features: "Membantu burung terbang dan menahan air agar kulit tidak basah.",
+            note: "Bulu berbeda dengan rambut karena memiliki pelepah/batang tengah.",
+            examples: [
+              { name: "Burung", svg: realisticSVGs.burung, desc: "Bulu pelepah penyeimbang terbang." }
+            ]
+          },
+          sisik: {
+            title: "Sisik (Reptil & Ikan)",
+            subtitle: "Lapisan keras berderet pada permukaan kulit luar.",
+            icon: "fa-fish",
+            features: "Melindungi dari parasit serta mengurangi gesekan saat bergerak.",
+            note: "Pada ikan dilapisi lendir licin, pada reptil relatif keras & kering.",
+            examples: [
+              { name: "Ikan Laut/Tawar", svg: realisticSVGs.ikan, desc: "Sisik licin meluncur di air." },
+              { name: "Ular", svg: realisticSVGs.ular, desc: "Sisik pelindung gesekan tanah." }
+            ]
+          },
+          cangkang: {
+            title: "Cangkang Keras",
+            subtitle: "Tempurung luar padat yang sangat keras.",
+            icon: "fa-shield",
+            features: "Melindungi organ tubuh lunak di dalam dari bahaya pemangsa.",
+            note: "Dapat menarik seluruh anggota tubuh ke dalam cangkang saat terancam.",
+            examples: [
+              { name: "Kura-Kura", svg: realisticSVGs.kurakura, desc: "Tempurung melengkung sangat kuat." }
+            ]
+          },
+          kulit_basah: {
+            title: "Kulit Lembap / Basah",
+            subtitle: "Kulit tipis, licin, dan selalu basah berlendir.",
+            icon: "fa-droplet",
+            features: "Memungkinkan penyerapan oksigen langsung melalui permukaan kulit.",
+            note: "Sangat peka terhadap kekeringan dan paparan panas terik.",
+            examples: [
+              { name: "Katak", svg: realisticSVGs.katak, desc: "Kulit basah penyerap oksigen." }
+            ]
+          }
+        }
+      }
+    };
+
+    /* SOAL KUIS EVALUASI IPAS */
+    const quizQuestions = [
+      {
+        question: "Katak tergolong hewan Amphibi karena memiliki keistimewaan tempat hidup yaitu...",
+        options: ["Hanya hidup di pohon tinggi", "Dapat hidup di darat maupun di air", "Hidup di gurun pasir", "Hanya bisa terbang di udara"],
+        answer: 1
+      },
+      {
+        question: "Fungsi utama penutup tubuh berupa rambut pada kucing dan sapi adalah...",
+        options: ["Mempermudah saat berenang", "Menjaga suhu tubuh agar tetap hangat", "Membuat tubuh jadi berat", "Sebagai alat bernapas"],
+        answer: 1
+      },
+      {
+        question: "Hewan unggas seperti burung memiliki penutup tubuh khas berupa...",
+        options: ["Sisik licin", "Cangkang keras", "Bulu berpelepah", "Kulit berlendir"],
+        answer: 2
+      },
+      {
+        question: "Kura-kura melindungi tubuh lunaknya dari bahaya pemangsa menggunakan...",
+        options: ["Cangkang keras", "Sirip berotot", "Rambut halus", "Kumis navigasi"],
+        answer: 0
+      },
+      {
+        question: "Ikan bernapas di dalam air menggunakan insang dan bergerak mendayung dengan...",
+        options: ["Sayap dan bulu", "Sirip dan ekor", "Kaki belakang", "Cakar tajam"],
+        answer: 1
+      }
+    ];
+
+    /* APP STATE */
+    let currentCategory = "habitat";
+    let currentSubKey = "darat";
+    let isMuted = false;
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let answeredQuestions = false;
+
+    /* NAVIGATION LOGIC */
+    function navigateTo(sectionId) {
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
+      const target = document.getElementById(`section-${sectionId}`);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('nav-btn-active'));
+      const activeBtn = document.getElementById(`nav-${sectionId}`);
+      if (activeBtn) activeBtn.classList.add('nav-btn-active');
+
+      if (sectionId === 'materi') switchCategory(currentCategory);
+    }
+
+    /* MATERI DISPLAY LOGIC */
+    function switchCategory(catKey) {
+      currentCategory = catKey;
+      const btnHab = document.getElementById('tab-cat-habitat');
+      const btnPen = document.getElementById('tab-cat-penutup');
+
+      if (catKey === 'habitat') {
+        btnHab.className = "px-3 py-1.5 rounded-xl font-heading font-semibold text-xs transition flex items-center gap-1.5 bg-orange-500 text-white shadow-lg shadow-orange-500/20";
+        btnPen.className = "px-3 py-1.5 rounded-xl font-heading font-semibold text-xs transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700";
+        currentSubKey = "darat";
+      } else {
+        btnPen.className = "px-3 py-1.5 rounded-xl font-heading font-semibold text-xs transition flex items-center gap-1.5 bg-orange-500 text-white shadow-lg shadow-orange-500/20";
+        btnHab.className = "px-3 py-1.5 rounded-xl font-heading font-semibold text-xs transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700";
+        currentSubKey = "rambut";
+      }
+
+      renderSubTabs();
+      showSubMateri(currentSubKey);
+    }
+
+    function renderSubTabs() {
+      const container = document.getElementById('sub-tabs-container');
+      container.innerHTML = "";
+      const subItems = materiData[currentCategory].subItems;
+
+      for (let key in subItems) {
+        const item = subItems[key];
+        const btn = document.createElement('button');
+        btn.id = `sub-tab-${key}`;
+        btn.onclick = () => showSubMateri(key);
+        btn.className = "sub-tab-btn px-2.5 py-1 rounded-lg text-xs font-medium transition flex items-center gap-1 bg-slate-800 text-slate-300 hover:bg-slate-700 whitespace-nowrap";
+        btn.innerHTML = `<i class="fa-solid ${item.icon}"></i> ${item.title}`;
+        container.appendChild(btn);
+      }
+    }
+
+    function showSubMateri(subKey) {
+      currentSubKey = subKey;
+      const data = materiData[currentCategory].subItems[subKey];
+
+      document.querySelectorAll('.sub-tab-btn').forEach(b => {
+        b.classList.remove('bg-yellow-500', 'text-slate-950', 'font-bold');
+        b.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      const activeSub = document.getElementById(`sub-tab-${subKey}`);
+      if (activeSub) {
+        activeSub.classList.remove('bg-slate-800', 'text-slate-300');
+        activeSub.classList.add('bg-yellow-500', 'text-slate-950', 'font-bold');
+      }
+
+      document.getElementById('materi-display-title').innerText = data.title;
+      document.getElementById('materi-display-subtitle').innerText = data.subtitle;
+      document.getElementById('materi-display-features').innerText = data.features;
+      document.getElementById('materi-display-note').innerText = data.note;
+      
+      const iconBox = document.getElementById('materi-display-icon');
+      iconBox.innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
+
+      /* Render Realistic SVG Cards */
+      const examplesGrid = document.getElementById('materi-examples-grid');
+      examplesGrid.innerHTML = "";
+
+      data.examples.forEach(ex => {
+        const exCard = document.createElement('div');
+        exCard.className = "p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center gap-3";
+        exCard.innerHTML = `
+          <div class="w-12 h-12 rounded-xl bg-slate-900/90 p-1 border border-slate-700 flex items-center justify-center flex-shrink-0">
+            ${ex.svg}
+          </div>
+          <div class="min-w-0">
+            <h4 class="font-heading font-semibold text-xs text-yellow-300 truncate">${ex.name}</h4>
+            <p class="text-[10px] text-slate-300 leading-tight mt-0.5 line-clamp-2">${ex.desc}</p>
+          </div>
+        `;
+        examplesGrid.appendChild(exCard);
+      });
+
+      if (!isMuted) speakText(`${data.title}. ${data.subtitle}`);
+    }
+
+    function readCurrentMateri() {
+      const data = materiData[currentCategory].subItems[currentSubKey];
+      speakText(`${data.title}. ${data.subtitle}. Ciri utamanya: ${data.features}`);
+    }
+
+    /* QUIZ LOGIC */
+    function startQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      document.getElementById('quiz-start-screen').classList.add('hidden');
+      document.getElementById('quiz-result-screen').classList.add('hidden');
+      document.getElementById('quiz-active-screen').classList.remove('hidden');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      answeredQuestions = false;
+      const q = quizQuestions[currentQuizIndex];
+
+      document.getElementById('quiz-progress-text').innerText = `Soal ${currentQuizIndex + 1} dari ${quizQuestions.length}`;
+      document.getElementById('quiz-score-live').innerText = `Skor: ${quizScore}`;
+      document.getElementById('quiz-progress-bar').style.width = `${((currentQuizIndex + 1) / quizQuestions.length) * 100}%`;
+      document.getElementById('quiz-question-text').innerText = q.question;
+
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      document.getElementById('btn-next-question').classList.add('hidden');
+
+      const optionsContainer = document.getElementById('quiz-options-container');
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "quiz-opt-btn p-3 rounded-xl bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700 text-left font-medium text-xs text-slate-200 transition flex items-center justify-between";
+        btn.onclick = () => checkAnswer(idx, btn);
+        btn.innerHTML = `<span>${opt}</span><i class="fa-regular fa-circle text-slate-500"></i>`;
+        optionsContainer.appendChild(btn);
+      });
+
+      if (!isMuted) speakText(q.question);
+    }
+
+    function checkAnswer(selectedIndex, clickedBtn) {
+      if (answeredQuestions) return;
+      answeredQuestions = true;
+
+      const q = quizQuestions[currentQuizIndex];
+      const feedback = document.getElementById('quiz-feedback');
+      const allBtns = document.querySelectorAll('.quiz-opt-btn');
+
+      if (selectedIndex === q.answer) {
+        quizScore += 20;
+        playBeepSound(650, 0.15);
+        clickedBtn.classList.add('bg-green-600/30', 'border-green-500', 'text-green-300');
+        clickedBtn.querySelector('i').className = 'fa-solid fa-circle-check text-green-400 text-sm';
+        feedback.className = "p-2.5 rounded-xl text-xs font-semibold text-center bg-green-500/20 text-green-300 border border-green-500/40";
+        feedback.innerText = "🎉 Jawaban kamu Benar! Tepat sekali!";
+      } else {
+        playBeepSound(220, 0.25);
+        clickedBtn.classList.add('bg-red-600/30', 'border-red-500', 'text-red-300');
+        clickedBtn.querySelector('i').className = 'fa-solid fa-circle-xmark text-red-400 text-sm';
+        allBtns[q.answer].classList.add('bg-green-600/20', 'border-green-500/50', 'text-green-300');
+        feedback.className = "p-2.5 rounded-xl text-xs font-semibold text-center bg-red-500/20 text-red-300 border border-red-500/40";
+        feedback.innerText = `❌ Jawaban benar: ${q.options[q.answer]}`;
+      }
+
+      feedback.classList.remove('hidden');
+      document.getElementById('quiz-score-live').innerText = `Skor: ${quizScore}`;
+      document.getElementById('btn-next-question').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      currentQuizIndex++;
+      if (currentQuizIndex < quizQuestions.length) showQuestion();
+      else finishQuiz();
+    }
+
+    function finishQuiz() {
+      document.getElementById('quiz-active-screen').classList.add('hidden');
+      document.getElementById('quiz-result-screen').classList.remove('hidden');
+      document.getElementById('final-score-text').innerText = `${quizScore} / 100`;
+
+      let message = quizScore === 100 ? "🌟 Sempurna! Kamu menguasai materi pengelompokan hewan!" : "👍 Bagus! Tingkatkan terus belajar IPAS ya!";
+      document.getElementById('final-message').innerText = message;
+      if (!isMuted) speakText(`Kuis selesai. Skor kamu adalah ${quizScore}`);
+    }
+
+    function readQuizQuestion() {
+      speakText(quizQuestions[currentQuizIndex].question);
+    }
+
+    /* AUDIO & TTS ENGINE */
+    function speakText(text) {
+      if (isMuted || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.95;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function toggleMuteSound() {
+      isMuted = !isMuted;
+      const icon = document.getElementById('audio-icon');
+      if (isMuted) {
+        icon.className = 'fa-solid fa-volume-xmark text-base text-red-400';
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      } else {
+        icon.className = 'fa-solid fa-volume-high text-base text-yellow-400';
+        speakText("Suara narasi aktif.");
+      }
+    }
+
+    function playBeepSound(freq, duration) {
+      if (isMuted) return;
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) { console.log(e); }
+    }
+
+    /* INIT */
+    window.onload = function() {
+      navigateTo('home');
+    };
+  </script>
+</body>
+</html>
